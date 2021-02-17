@@ -5,7 +5,7 @@ void spawnMapper(int nMappers) {
 	for(int i=1; i<=nMappers; i++) {
 		process = fork();
 		if(process == 0)
-			execlp("mapper.exe", "mapper.exe", i, nMappers, NULL);
+			execlp("mapper.exe", "mapper.exe", i, nMappers, "output/IntermediateData/", NULL);
 	}
 }
 
@@ -14,7 +14,13 @@ void spawnReducers(int nReducers) {
 	for(int i=1; i<=nReducers; i++) {
 		process = fork();
 		if(process == 0)
-			execlp("reducer.exe", "reducer.exe", i, nReducers, NULL);
+			execlp("reducer.exe", "reducer.exe", i, nReducers, "output/IntermediateData/", NULL);
+	}
+}
+
+void waitForAll(int num) {
+	for(int i=0; i<num; i++) {
+		wait(NULL);
 	}
 }
 
@@ -35,17 +41,13 @@ int main(int argc, char *argv[]) {
 	spawnMapper(nMappers);
 
 	// TODO: wait for all children to complete execution
-	for(int i=0; i<nMappers; i++) {
-		wait(NULL);
-	}
+	waitForAll(nMappers);
 
 	// TODO: spawn reducers
 	spawnReducers(nReducers);
 
 	// TODO: wait for all children to complete execution
-	for(int i=0; i<nMappers; i++) {
-		wait(NULL);
-	}
+	waitForAll(nReducers);
 
 	return EXIT_SUCCESS;
 }
