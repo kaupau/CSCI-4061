@@ -14,9 +14,7 @@ int main(int argc, char *argv[]) {
 	bookeepingCode();
 
 	// TODO: spawn mappers	
-	for(int i=0; i<nMappers; i++) {
-		
-	}
+	execlp("mapper.exe", "mapper.exe", ,NULL);
 
 	// TODO: wait for all children to complete execution
 	for(int i=0; i<nMappers; i++) {
@@ -24,9 +22,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// TODO: spawn reducers
-	for(int i=0; i<nReducers; i++) {
-		
-	}
+	execlp("reducer.exe", "reducer.exe", ,NULL);
 
 	// TODO: wait for all children to complete execution
 	for(int i=0; i<nMappers; i++) {
