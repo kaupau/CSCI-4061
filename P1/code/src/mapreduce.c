@@ -14,12 +14,24 @@ int main(int argc, char *argv[]) {
 	bookeepingCode();
 
 	// TODO: spawn mappers	
+	for(int i=0; i<nMappers; i++) {
+		
+	}
 
 	// TODO: wait for all children to complete execution
+	for(int i=0; i<nMappers; i++) {
+		wait(NULL);
+	}
 
 	// TODO: spawn reducers
+	for(int i=0; i<nReducers; i++) {
+		
+	}
 
 	// TODO: wait for all children to complete execution
+	for(int i=0; i<nMappers; i++) {
+		wait(NULL);
+	}
 
 	return EXIT_SUCCESS;
 }
