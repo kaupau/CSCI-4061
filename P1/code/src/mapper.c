@@ -23,6 +23,8 @@ int main(int argc, char *argv[]) {
     char *myTasks[MaxNumInputFiles] = {NULL};
     int nTasks = getMapperTasks(nMappers, mapperID, inputFileDir, &myTasks[0]);
 
+    printf("In mapper %d of %d with %d tasks\n",mapperID,nMappers,nTasks);
+
     int tIdx;
     for (tIdx = 0; tIdx < nTasks; tIdx++) {
         printf("mapper[%d] - %s\n", mapperID, myTasks[tIdx]);

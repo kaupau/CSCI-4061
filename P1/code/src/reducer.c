@@ -24,6 +24,7 @@ int main(int argc, char *argv[]) {
     char *myTasks[MaxNumIntermediateFiles] = {NULL};
     int nTasks = getReducerTasks(nReducers, reducerID, intermediateDir, &myTasks[0]);
 
+    printf("In reducer %d of %d with ntasks %d\n",reducerID,nReducers,nTasks);
     int tIdx;
     for (tIdx = 0; tIdx < nTasks; tIdx++) {
         printf("reducer[%d] - %s\n", reducerID, myTasks[tIdx]);
