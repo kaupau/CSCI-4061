@@ -5,12 +5,53 @@
  * The file should be in a corresponding folder in output/IntermediateData/ 
  */
 void writeInterDSToFiles(void) {
+  char outputFilePath[2*maxFileNameLength] = "";
+  char outputFileFolder[maxFileNameLength] = "";
+  char outputFileName[maxFileNameLength] = "";
+  sprintf(outputFileName, "/m%d.txt", mapperID);
+  printf("Mapper %d final DS:\n",mapperID);
+  for(int i = 0; i < MaxWordLength;i++) {
+    if(interDS[i] > 0) {
+      strcpy(outputFilePath,intermediateDir);
+      sprintf(outputFileFolder, "/%d", i+1);
+      strcat(outputFilePath,outputFileFolder);
+      strcat(outputFilePath,outputFileName);
+      printf("Writing to file: %s\n",outputFilePath);
+      FILE* outputFile = fopen(outputFilePath,"w");
+
+      fprintf(outputFile,"%d %d",i+1,interDS[i]);
+
+      fclose(outputFile);
+
+      printf("Length: %d Num: %d\n",i+1,interDS[i]);
+    }
+  }
 }
 
 /**
  * Read lines from files, and count words by word length
  */
 void map(char * inputFileName) {
+  FILE* inputFile = getFilePointer(inputFileName);
+  int charIn;
+
+  int wordSize = 0;
+  while(1) {
+    if(feof(inputFile))
+      break;
+
+    charIn = fgetc(inputFile);
+    if(charIn == ' ' || charIn == '\n' || feof(inputFile)) {
+      if(wordSize > 0) {
+        //printf("Writing word of size %d\n",wordSize);
+        interDS[wordSize-1] += 1;
+        wordSize = 0;
+      }
+    } else {
+    wordSize++;
+    }
+  }
+
 }
 
 int main(int argc, char *argv[]) {
