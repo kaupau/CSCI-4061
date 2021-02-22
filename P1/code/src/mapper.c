@@ -21,6 +21,10 @@ void writeInterDSToFiles(void) {
       
       // write word length and number of words
       FILE* outputFile = fopen(outputFilePath,"w");
+      if(outputFile == NULL) {
+        printf("Error when opening output file %s\n",outputFilePath);
+        continue;
+      }
       fprintf(outputFile,"%d %d",i+1,interDS[i]);
       fclose(outputFile);
     }
@@ -53,10 +57,16 @@ void map(char * inputFileName) {
     }
   }
 
+  fclose(inputFile);
+
 }
 
 int main(int argc, char *argv[]) {
 
+    if(argc != 4) {
+      printf("Mapper received incorrect number of arguments\n");
+      return -1;
+    }
     mapperID = strtol(argv[1], NULL, 10);
     int nMappers = strtol(argv[2], NULL, 10);
     inputFileDir = argv[3];
@@ -64,8 +74,6 @@ int main(int argc, char *argv[]) {
     //getMapperTasks function returns a list of input file names that this mapper should process
     char *myTasks[MaxNumInputFiles] = {NULL};
     int nTasks = getMapperTasks(nMappers, mapperID, inputFileDir, &myTasks[0]);
-
-    printf("In mapper %d of %d with %d tasks\n",mapperID,nMappers,nTasks);
 
     int tIdx;
     for (tIdx = 0; tIdx < nTasks; tIdx++) {
