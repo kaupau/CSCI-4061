@@ -1,6 +1,6 @@
 #include "mapreduce.h"
 
-void spawnMapper(int nMappers, char* inputFileDir) {
+void spawnMapper(int nMappers) {
 	int process;
 	for(int i=1; i<=nMappers; i++) {
 		process = fork();
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 	bookeepingCode();
 
 	// TODO: spawn mappers	
-	spawnMapper(nMappers,inputFileDir);
+	spawnMapper(nMappers);
 
 	// TODO: wait for all children to complete execution
 	waitForAll(nMappers);

@@ -8,22 +8,21 @@ void writeInterDSToFiles(void) {
   char outputFilePath[2*maxFileNameLength] = "";
   char outputFileFolder[maxFileNameLength] = "";
   char outputFileName[maxFileNameLength] = "";
+  // name of file for this mapper is always the same
   sprintf(outputFileName, "/m%d.txt", mapperID);
-  printf("Mapper %d final DS:\n",mapperID);
+
   for(int i = 0; i < MaxWordLength;i++) {
     if(interDS[i] > 0) {
+      // construct path to output file
       strcpy(outputFilePath,intermediateDir);
       sprintf(outputFileFolder, "/%d", i+1);
       strcat(outputFilePath,outputFileFolder);
       strcat(outputFilePath,outputFileName);
-      printf("Writing to file: %s\n",outputFilePath);
+      
+      // write word length and number of words
       FILE* outputFile = fopen(outputFilePath,"w");
-
       fprintf(outputFile,"%d %d",i+1,interDS[i]);
-
       fclose(outputFile);
-
-      printf("Length: %d Num: %d\n",i+1,interDS[i]);
     }
   }
 }
@@ -33,17 +32,19 @@ void writeInterDSToFiles(void) {
  */
 void map(char * inputFileName) {
   FILE* inputFile = getFilePointer(inputFileName);
-  int charIn;
+  int charIn; // for storing characters read from file
 
-  int wordSize = 0;
+  int wordSize = 0; // for keeping track of length of the current word
+  // loop through every character in the file
   while(1) {
-    if(feof(inputFile))
+    if(feof(inputFile)) // break when end of file reached
       break;
 
-    charIn = fgetc(inputFile);
+    charIn = fgetc(inputFile); // gets a single character from file
+    // a word has ended when a space or a newline has been reached
     if(charIn == ' ' || charIn == '\n' || feof(inputFile)) {
       if(wordSize > 0) {
-        //printf("Writing word of size %d\n",wordSize);
+        // element i-1 of interDS corresponds to words of length i
         interDS[wordSize-1] += 1;
         wordSize = 0;
       }
