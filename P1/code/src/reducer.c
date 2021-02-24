@@ -5,6 +5,7 @@
  * The file should be in a corresponding folder in output/FinalData/ 
  */
 void writeFinalDSToFiles(void) {
+    
 }
 
 
@@ -12,6 +13,7 @@ void writeFinalDSToFiles(void) {
  * Read lines from files, and calculate a total count for a specific word length
  */
 void reduce(char * intermediateFileName) {
+    
 }
 
 int main(int argc, char *argv[]) {
