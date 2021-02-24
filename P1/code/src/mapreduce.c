@@ -4,18 +4,30 @@ void spawnMapper(int nMappers) {
 	int process;
 	for(int i=1; i<=nMappers; i++) {
 		process = fork();
-		if(process == 0)
-			execlp("mapper.exe", "mapper.exe", i, nMappers, "output/IntermediateData/", NULL);
-	}
+		if(process == 0) {
+      char iString[4];
+      char nMappersString[4];
+      sprintf(iString,"%d",i);
+      sprintf(nMappersString,"%d",nMappers);
+			execl("./mapper", "./mapper",iString, nMappersString, inputFileDir, NULL);
+      printf("execlp mapper failed\n");
+    }
+  }
 }
 
 void spawnReducers(int nReducers) {
 	int process;
 	for(int i=1; i<=nReducers; i++) {
 		process = fork();
-		if(process == 0)
-			execlp("reducer.exe", "reducer.exe", i, nReducers, "output/IntermediateData/", NULL);
-	}
+		if(process == 0) {
+      char iString[4];
+      char nReducersString[4];
+      sprintf(iString,"%d",i);
+      sprintf(nReducersString,"%d",nReducers);
+			execl("./reducer", "./reducer", iString, nReducersString, NULL);
+      printf("execlp reducer failed\n");
+    }
+  }
 }
 
 void waitForAll(int num) {

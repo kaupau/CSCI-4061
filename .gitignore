@@ -1,0 +1,15 @@
+#ignore extensionless files
+*
+!/**/
+!*.*
+
+#extensions to ignore
+*.o
+*.out
+*.pvt
+
+#files to ignore
+
+#files to keep
+!*Makefile
+!*Doxyfile
