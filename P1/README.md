@@ -1,9 +1,20 @@
+test machine: csel-kh1260-03
+date: 2/24/2021
+name: Kaushik Kanna, Alan Wang
+x500: kanna114, wang7200
+
 # Project 1 : MapReduce - Word counts of different lengths
-Completed by Kaushik Kanna (kanna114) and Alan Wang (wang7200)
+
+## Contributions
+Kaushik: mapreduce.c, reducer.c, README.md
+Alan: mapreduce.c, mapper.c, README.md
 
 ## Master function (mapreduce.c)
 
 The master mapreduce uses map and reduce logic paradigm for counting the number of words of different lengths in a large collection of documents by executing mappers and reducers accordingly.
+The first argument is the number of mapper processes, and the second is the number of reducer processes. The third argument is the path to the folder which contains the text files with words to be counted.
+
+The result of executing this program is the folder ./output, which contains the word count data.
 
 ## Map function (mapper.c)
 
