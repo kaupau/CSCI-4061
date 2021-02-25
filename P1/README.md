@@ -96,9 +96,3 @@ Pass test T2
 ================================================
 Testing ended....
 ```
-	
-## Note:
-The current code is the first draft. There might be some edge case that I missed, like the empty file case. I am working on them. The code is just for giving you an idea of how the overall project looks like.
-
-The header files are not required as the function definition is in the same file as usage. This is the layout that I usually follow.
-
