@@ -10,9 +10,10 @@ void spawnMapper(int nMappers) {
 			sprintf(iString,"%d",i);
 			sprintf(nMappersString,"%d",nMappers);
 			execl("./mapper", "./mapper",iString, nMappersString, inputFileDir, NULL);
-			printf("execlp mapper failed\n");
-    	}
-  	}
+      printf("execlp mapper failed\n");
+      exit(EXIT_FAILURE);
+    }
+  }
 }
 
 void spawnReducers(int nReducers) {
@@ -25,40 +26,54 @@ void spawnReducers(int nReducers) {
 			sprintf(iString,"%d",i);
 			sprintf(nReducersString,"%d",nReducers);
 			execl("./reducer", "./reducer", iString, nReducersString, NULL);
-			printf("execlp reducer failed\n");
-    	}
-  	}
+      printf("execlp reducer failed\n");
+      exit(EXIT_FAILURE);
+    }
+  }
 }
 
 void waitForAll(int num) {
-	for(int i=0; i<num; i++) {
-		wait(NULL);
+	pid_t pid_child;
+  for(int i=0; i<num; i++) {
+		pid_child = wait(NULL);
+    if(pid_child < 0) {
+      printf("Waited for non-existant child\n");
+      exit(EXIT_FAILURE);
+    }
 	}
 }
 
 int main(int argc, char *argv[]) {
 	
-	//TODO: number of argument check
+	// check number of arguments
+  if(argc < 4) {
+    printf("Incorrect number of arguments\n");
+    exit(EXIT_FAILURE);
+  }
 
 	int nMappers 	= strtol(argv[1], NULL, 10);
 	int nReducers 	= strtol(argv[2], NULL, 10);
+  if( nMappers < 1 || nReducers < 1) {
+    printf("Number of mappers or reducers must be at least 1 each\n");
+    exit(EXIT_FAILURE);
+  }
 
-    inputFileDir = argv[3];
-    if(!isValidDir(inputFileDir))
-        exit(EXIT_FAILURE);
+  inputFileDir = argv[3];
+  if(!isValidDir(inputFileDir))
+    exit(EXIT_FAILURE);
 
 	bookeepingCode();
 
-	// TODO: spawn mappers	
+	// spawn mappers	
 	spawnMapper(nMappers);
 
-	// TODO: wait for all children to complete execution
+	// wait for all children to complete execution
 	waitForAll(nMappers);
 
-	// TODO: spawn reducers
+	// spawn reducers
 	spawnReducers(nReducers);
 
-	// TODO: wait for all children to complete execution
+	// wait for all children to complete execution
 	waitForAll(nReducers);
 
 	return EXIT_SUCCESS;
