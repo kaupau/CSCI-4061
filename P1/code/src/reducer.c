@@ -5,7 +5,22 @@
  * The file should be in a corresponding folder in output/FinalData/ 
  */
 void writeFinalDSToFiles(void) {
-    
+    // create file descriptor
+    char outputFileName[maxFileNameLength] = "";
+    FILE* outputFile;
+
+    // for every word length in our data structure, create a new file and put the word count on it
+    for(int wordLength = 0; wordLength <= MaxWordLength; wordLength++) {
+        if(finalDS[wordLength] > 0) {
+            // format the file path name
+            sprintf(outputFileName, "%s/%d.txt", finalDir, wordLength);
+            outputFile = fopen(outputFileName,"w");
+
+            // format the file path name
+            fprintf(outputFile, "%d %d", wordLength, finalDS[wordLength]);
+            fclose(outputFile);
+        }
+    }
 }
 
 
@@ -13,7 +28,23 @@ void writeFinalDSToFiles(void) {
  * Read lines from files, and calculate a total count for a specific word length
  */
 void reduce(char * intermediateFileName) {
+    FILE* inputFile = getFilePointer(intermediateFileName);
+
+    int wordLength;
+    int count = 0;
+
+    char line[maxFileNameLength];
+    getLineFromFile(inputFile, line, maxFileNameLength);
     
+    // Split the line into the word length and it's corresponding count
+    char *lineSplitter;
+    lineSplitter = strtok(line, " ");
+    wordLength = strtol(lineSplitter, NULL, 10);
+    lineSplitter = strtok(NULL, " ");
+    count = strtol(lineSplitter, NULL, 10);        
+
+    fclose(inputFile);
+    finalDS[wordLength] += count;     // stores the total count for a particular word length in an intermediate structure
 }
 
 int main(int argc, char *argv[]) {

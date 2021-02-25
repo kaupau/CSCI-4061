@@ -382,7 +382,7 @@ And broken chariot-wheels. So thick bestrown,
 Abject and lost, lay these, covering the flood, 
 Under amazement of their hideous change. 
 He called so loud that all the hollow deep 
-Of Hell resounded:--"Princes, Potentates, 
+Of Hell resounded:--"Princes Potentates, 
 Warriors, the Flower of Heaven--once yours; now lost, 
 If such astonishment as this can seize 
 Eternal Spirits! Or have ye chosen this place 
@@ -8084,7 +8084,7 @@ Or touch with lightest moment of impulse
 His free will, to her own inclining left 
 In even scale.  But fallen he is; and now 
 What rests, but that the mortal sentence pass 
-On his transgression,--death denounced that day? 
+On his transgression,-death denounced that day? 
 Which he presumes already vain and void, 
 Because not yet inflicted, as he feared, 
 By some immediate stroke; but soon shall find 
@@ -10697,3 +10697,5 @@ They, hand in hand, with wandering steps and slow,
 Through Eden took their solitary way. 
  
 [The End]
+
+
