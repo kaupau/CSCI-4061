@@ -37,9 +37,7 @@ mapper[3] - test/T0/2.txt
 mapper[6] - test/T0/5.txt
 mapper[5] - test/T0/4.txt
 mapper[4] - test/T0/3.txt
-In reducer 1 of 3 with ntasks 6
 reducer[1] - output/IntermediateData/1/m6.txt
-In reducer 2 of 3 with ntasks 6
 reducer[2] - output/IntermediateData/2/m6.txt
 reducer[1] - output/IntermediateData/1/m1.txt
 reducer[2] - output/IntermediateData/2/m1.txt
@@ -51,7 +49,6 @@ reducer[1] - output/IntermediateData/1/m2.txt
 reducer[2] - output/IntermediateData/2/m4.txt
 reducer[1] - output/IntermediateData/1/m5.txt
 reducer[2] - output/IntermediateData/2/m3.txt
-In reducer 3 of 3 with ntasks 6
 reducer[3] - output/IntermediateData/3/m3.txt
 reducer[3] - output/IntermediateData/3/m4.txt
 reducer[3] - output/IntermediateData/3/m5.txt
@@ -62,11 +59,8 @@ Pass test T0
 ================================================
 Testcase T1 starts
 mapper[1] - test/T1/F1.txt
-In reducer 3 of 3 with ntasks 6
 reducer[3] - output/IntermediateData/3/m1.txt
-In reducer 1 of 3 with ntasks 7
 reducer[1] - output/IntermediateData/1/m1.txt
-In reducer 2 of 3 with ntasks 7
 reducer[2] - output/IntermediateData/2/m1.txt
 reducer[3] - output/IntermediateData/6/m1.txt
 reducer[2] - output/IntermediateData/5/m1.txt
@@ -89,9 +83,6 @@ Pass test T1
 ================================================
 Testcase T2 starts
 mapper[1] - test/T2/F2.txt
-In reducer 3 of 3 with ntasks 0
-In reducer 1 of 3 with ntasks 0
-In reducer 2 of 3 with ntasks 0
 Pass test T2
 ================================================
 Testing ended....
