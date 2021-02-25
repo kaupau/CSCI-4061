@@ -48,16 +48,18 @@ void reduce(char * intermediateFileName) {
 }
 
 int main(int argc, char *argv[]) {
-
-	// initialize 
-	reducerID = strtol(argv[1], NULL, 10);
-	int nReducers = strtol(argv[2], NULL, 10);
+    if(argc != 3) {
+      printf("Reducer received incorrect number of arguments\n");
+      return -1;
+    }
+	  // initialize 
+	  reducerID = strtol(argv[1], NULL, 10);
+	  int nReducers = strtol(argv[2], NULL, 10);
 
     //getReducerTasks function returns a list of intermediate file names that this reducer should process
     char *myTasks[MaxNumIntermediateFiles] = {NULL};
     int nTasks = getReducerTasks(nReducers, reducerID, intermediateDir, &myTasks[0]);
 
-    printf("In reducer %d of %d with ntasks %d\n",reducerID,nReducers,nTasks);
     int tIdx;
     for (tIdx = 0; tIdx < nTasks; tIdx++) {
         printf("reducer[%d] - %s\n", reducerID, myTasks[tIdx]);
