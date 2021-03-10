@@ -1,7 +1,7 @@
 #include "mapper.h"
 
 /**
- * Write word count that is stored in a intermeidate data structure to files.
+ * Write word count that is stored in a intermediate data structure to files.
  * The file should be in a corresponding folder in output/IntermediateData/ 
  */
 void writeInterDSToFiles(void) {
@@ -70,6 +70,10 @@ int main(int argc, char *argv[]) {
     mapperID = strtol(argv[1], NULL, 10);
     int nMappers = strtol(argv[2], NULL, 10);
     inputFileDir = argv[3];
+    if(!isValidDir(inputFileDir)) {
+        printf("Input file directory is invalid\n");
+        exit(EXIT_FAILURE);
+    }
 
     //getMapperTasks function returns a list of input file names that this mapper should process
     char *myTasks[MaxNumInputFiles] = {NULL};
