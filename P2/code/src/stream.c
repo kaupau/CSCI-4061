@@ -22,8 +22,8 @@ int main(int argc, char *argv[]) {
     //TODO: Read lines from Mapper files and get the file names that will be processes in emit function
     //Each MapperInput/MapperID.txt file will contain file names
     // example of one line will be test/T1/subfolder/0.txt
-    while(){
-        emit(filePath);
+    while(1){
+        emit("test");
     }
     return EXIT_SUCCESS;
 }

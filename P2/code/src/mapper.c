@@ -19,8 +19,8 @@ int main(int argc, char *argv[]) {
 
     // you can read lines from pipes (from STDIN) (read lines in a while loop)
     // feel free to change
-    while() {
-        parse()
+    while(1) {
+        parse("test");
     }
 
     writeInterDSToFiles();
