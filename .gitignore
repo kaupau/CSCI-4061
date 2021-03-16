@@ -3,6 +3,9 @@
 !/**/
 !*.*
 
+#ignore files that start with .
+.*
+
 #extensions to ignore
 *.o
 *.out

@@ -16,11 +16,13 @@ void parse(char * line) {
 int main(int argc, char *argv[]) {
 
     mapperID = strtol(argv[1], NULL, 10);
+printf("In mapper %d\n",mapperID);
+exit(0);
 
     // you can read lines from pipes (from STDIN) (read lines in a while loop)
     // feel free to change
-    while() {
-        parse()
+    while(1) {
+        parse("test");
     }
 
     writeInterDSToFiles();
