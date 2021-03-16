@@ -6,12 +6,34 @@ int isTxtFile(char* filename);
 
 char* constructPath(char* pathto, char* filename);
 
+char* intToString(int n);
+
+void waitForAll(int num) {
+	pid_t pid_child;
+	for(int i=0; i<num; i++) {
+		pid_child = wait(NULL);
+		if(pid_child < 0) {
+			printf("Waited for non-existant child\n");
+			exit(EXIT_FAILURE);
+		}
+	}
+}
+
+
 int main(int argc, char *argv[]) {
 
-	//TODO: number of argument check
+	if(argc < 4) {
+		printf("Incorrect number of arguments\n");
+		exit(EXIT_FAILURE);
+	}
 
 	int nMappers 	= strtol(argv[1], NULL, 10);
 	int nReducers 	= strtol(argv[2], NULL, 10);
+
+	if( nMappers < 1 || nReducers < 1) {
+		printf("Number of mappers or reducers must be at least 1 each\n");
+		exit(EXIT_FAILURE);
+	}
 
 	inputFileDir = argv[3];
 	if(!isValidDir(inputFileDir))
@@ -41,7 +63,7 @@ int main(int argc, char *argv[]) {
 	printf("\nWriting to Mapper_xx.txt files...\n");
 	int mapperID = 0;
 	for(char** txtname = txtFiles; *txtname != NULL; txtname++) {
-		printf("\t%s assigned to mapper mapperID %d\n",*txtname, mapperID);
+		printf("\t%s assigned to mapper mapperID %d\n",*txtname, mapperID+1);
 		fprintf(mapperIDtxtfiles[mapperID],"%s\n",*txtname);
 		free(*txtname);
 		mapperID = (mapperID + 1)%nMappers;
@@ -52,12 +74,40 @@ int main(int argc, char *argv[]) {
 	}
 	free(mapperIDtxtfiles);
 
-	printf("Done\n\n");
 	//TODO: spawn stream processes
+	int pipefds[nMappers][2];
 
-	// TODO: spawn mappers	
+	for(int i = 0; i < nMappers; i++) {
+		if(pipe(pipefds[i]) < 0) {
+			printf("Pipe creation failed\n");
+			exit(0);
+		}
+		pid_t pid = fork();
+		if(pid == 0) {
+			int stdout = dup(1);
+			dup2(pipefds[i][1],1);
+			close(pipefds[i][0]);
+			execl("./stream","./stream",intToString(i+1),intToString(nMappers),NULL);
+			dup2(stdout,1);
+			printf("Exec stream failed\n"); exit(0);
+		}
+	}
+
+	// TODO: spawn mappers
+	for(int i = 0; i < nMappers; i++) {
+		pid_t pid = fork();
+		if(pid == 0) {
+			dup2(pipefds[i][0],0);
+			close(pipefds[i][1]);
+			execl("./mapper","./mapper",intToString(i+1),NULL);
+			printf("Exec mapper failed\n"); exit(0);
+		}
+	}
+
 
 	// TODO: wait for all children to complete execution
+	waitForAll(nMappers*2); // waiting for both mappers and streams
+	printf("\nDone\n\n");
 
 	// TODO: spawn reducers
 
@@ -71,7 +121,7 @@ char** getTxtFiles(char* path, char** txtFileBuffer) {
 	DIR* dr = opendir(path);
 	if(dr == NULL) {
 		printf("Directory failed to open\n");
-		return 0;
+		exit(0);
 	}
 	printf("Opened directory %s\n",path);
 	struct dirent* de;
@@ -118,4 +168,9 @@ char* constructPath(char* pathto, char* filename) {
 	return newpath;
 }
 
+char* intToString(int n) {
+	char* output = malloc(64 * sizeof(char));
+	sprintf(output, "%d",n);
+	return output;
+}
 
