@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
     int nMappers = strtol(argv[2], NULL, 10);
 
     char* ipFdr = "MapperInput/Mapper";
-printf("In stream %d\n",mapperID);
+//printf("Printing to stdout from stream %d\n",mapperID);
 exit(0);
 
     //TODO: Read lines from Mapper files and get the file names that will be processes in emit function
