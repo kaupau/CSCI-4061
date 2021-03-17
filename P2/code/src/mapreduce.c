@@ -16,6 +16,7 @@ void waitForAll(int num) {
 			printf("Waited for non-existant child\n");
 			exit(EXIT_FAILURE);
 		}
+		printf("mapreduce has waited for %d of %d childs\n",i+1,num);
 	}
 }
 
@@ -84,9 +85,16 @@ int main(int argc, char *argv[]) {
 		}
 		pid_t pid = fork();
 		if(pid == 0) {
-			int stdout = dup(1);
-			dup2(pipefds[i][1],1);
-			close(pipefds[i][0]);
+			int stdout = dup(1); // save stdout just in case
+			dup2(pipefds[i][1],1); // dup write end of pipe
+			close(pipefds[i][0]); // close read end of pipe
+			for(int j = 0; j < nMappers; j++) { // close all other pipes
+				if(j!=i) {
+					close(pipefds[j][0]);
+					close(pipefds[j][1]);
+				}
+			}
+
 			execl("./stream","./stream",intToString(i+1),intToString(nMappers),NULL);
 			dup2(stdout,1);
 			printf("Exec stream failed\n"); exit(0);
@@ -97,13 +105,24 @@ int main(int argc, char *argv[]) {
 	for(int i = 0; i < nMappers; i++) {
 		pid_t pid = fork();
 		if(pid == 0) {
-			dup2(pipefds[i][0],0);
-			close(pipefds[i][1]);
+			dup2(pipefds[i][0],0); // dup read end of pipe to stdin
+			close(pipefds[i][1]); // close write end of pipe
+			for(int j = 0; j < nMappers; j++) { // close all other pipes
+				if(j!=i) {
+					close(pipefds[j][0]);
+					close(pipefds[j][1]);
+				}
+			}
+
 			execl("./mapper","./mapper",intToString(i+1),NULL);
 			printf("Exec mapper failed\n"); exit(0);
 		}
 	}
 
+	for(int i = 0; i < nMappers; i++) {
+		close(pipefds[i][0]);
+		close(pipefds[i][1]);
+	}
 
 	// TODO: wait for all children to complete execution
 	waitForAll(nMappers*2); // waiting for both mappers and streams
