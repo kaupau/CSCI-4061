@@ -24,11 +24,7 @@ exit(0);
     //Each MapperInput/MapperID.txt file will contain file names
     // example of one line will be test/T1/subfolder/0.txt
     while(1){
-<<<<<<< HEAD
-        emit(filePath);
-=======
         emit("test");
->>>>>>> d4e3dbfc10a325580f6f0354269885867066590e
     }
     return EXIT_SUCCESS;
 }
