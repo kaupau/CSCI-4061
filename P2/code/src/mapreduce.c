@@ -90,8 +90,8 @@ int main(int argc, char *argv[]) {
 			close(pipefds[i][0]); // close read end of pipe
 			for(int j = 0; j < nMappers; j++) { // close all other pipes
 				if(j!=i) {
-					close(pipefds[j][0]);
-					close(pipefds[j][1]);
+					// close(pipefds[j][0]);
+					// close(pipefds[j][1]);
 				}
 			}
 
@@ -134,7 +134,7 @@ int main(int argc, char *argv[]) {
 	for(int i = 0; i < nReducers; i++) {
 		pid_t pid = fork();
 		if(pid == 0) {
-			execl("./reducer","./reducer",intToString(i+1),NULL);
+			execl("./reducer","./reducer",intToString(i+1),intToString(nReducers),NULL);
 			printf("Exec mapper failed\n"); exit(0);
 		}
 	}
@@ -196,10 +196,3 @@ char* constructPath(char* pathto, char* filename) {
 	strncat(newpath,filename,strlen(filename));
 	return newpath;
 }
-
-char* intToString(int n) {
-	char* output = malloc(64 * sizeof(char));
-	sprintf(output, "%d",n);
-	return output;
-}
-

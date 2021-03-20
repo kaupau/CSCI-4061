@@ -47,8 +47,11 @@ int main(int argc, char *argv[]) {
     // you can read lines from pipes (from STDIN) (read lines in a while loop)
     // feel free to change
     while(1) {
-        if(charIn <= 0) // break when stdin is closed
-            break;
+        if(charIn <= 0) {
+          // break when stdin is closed
+          // fprintf(stderr, "End of stdin for mapper %d\n", mapperID);
+          break;
+        }
         charIn = getchar();
         printf("Mapper %d got %c\n", mapperID, ((char)charIn));
         if(charIn == ' ' || charIn == '\n' || charIn <= 0) {

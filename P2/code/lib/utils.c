@@ -24,21 +24,55 @@ ssize_t getLineFromFile(FILE *fp, char *line, size_t len) {
     return getline(&line, &len, fp);
 }
 
-
 //TODO
 // return: The number of intermediate files the reducer should process
 // The list of intermediate file names are stored in myTasks array
-int getReducerTasks(int nReducers, int reducerID, char *intermediateDir, char **myTasks) {
-    DIR *dir = opendir(intermediateDir);
-    struct dirent *de;
-    int i = 0;
-    while( (de = readdir(dir)) != NULL ) {
-        myTasks[i] = de->d_name;
-        i++;
-    } 
-    return i+1;
+char* intToString(int n) {
+	char* output = malloc(64 * sizeof(char));
+	sprintf(output, "%d",n);
+	return output;
 }
 
+int getReducerTasks(int nReducers, int reducerID, char *intermediateDir, char **myTasks) {
+    // nAllTasks / nReducers = tasks per each reducer
+    int nAllTasks = 0;
+    char *allTasks[20] = {NULL};
+    for(int i = 1; i <= 20; i++) {
+        char filename[maxFileNameLength];
+        strcpy(filename, intermediateDir);
+        strcat(filename, "/");
+        strcat(filename, intToString(i));
+        DIR *dir = opendir(filename);
+        struct dirent *de;
+
+        de = readdir(dir);
+        while( (de = readdir(dir)) != NULL ) {
+            if( strcmp(de->d_name, "..") != 0 && strcmp(de->d_name, ".") != 0 ) {
+                char newFilename[maxFileNameLength];
+                strcpy(newFilename, filename);
+                strcat(newFilename, "/");
+                strcat(newFilename, de->d_name);
+                
+                allTasks[nAllTasks] = malloc(sizeof(char)*maxFileNameLength);
+                strcpy(allTasks[nAllTasks], newFilename);
+
+                nAllTasks++;
+            } 
+        }
+    }
+    
+    int nTasks = (nAllTasks / nReducers);
+    int j = 0;
+    for(int i = nTasks*(reducerID-1); i < nTasks*(reducerID-1)+nTasks; i++) {
+        // printf("Task: %d \t%s\n", i, allTasks[i]);
+        myTasks[j] = malloc(sizeof(char)*maxFileNameLength);
+        strcpy(myTasks[j], allTasks[i]);
+        j++;
+    }
+    printf("nTasks: %d\n", nTasks);
+
+    return nTasks;
+}
 
 //TODO: traverse inputfile directory and create MapperInput directory
 void traverseFS(int mappers, char *path){
@@ -86,6 +120,3 @@ void bookeepingCode(){
     _createOutputDir();
     _createInterFolders();
 }
-
-
-

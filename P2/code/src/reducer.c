@@ -18,7 +18,6 @@ void writeFinalDSToFiles(void) {
 
             // format the file path name
             fprintf(outputFile, "%d %d", wordLength, finalDS[wordLength]);
-            printf("kau %d %d", wordLength, finalDS[wordLength]); // remove later
             fclose(outputFile);
         }
     }
@@ -48,6 +47,8 @@ void reduce(char * intermediateFileName) {
     finalDS[wordLength] += count;     // stores the total count for a particular word length in an intermediate structure
 }
 
+
+
 int main(int argc, char *argv[]) {
 
 	// initialize 
@@ -59,6 +60,7 @@ int main(int argc, char *argv[]) {
 
     //TODO: you can write your own getReducerTasks in utils file or change this however you like.
     int nTasks = getReducerTasks(nReducers, reducerID, intermediateDir, &myTasks[0]);
+    // nAllTasks / nReducers = tasks per each reducer
 
     int tIdx;
     for (tIdx = 0; tIdx < nTasks; tIdx++) {
