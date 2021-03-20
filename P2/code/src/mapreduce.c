@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
 	char* filepath;
 	char filename[maxFileNameLength];
 	for(int i = 0; i < nMappers; i++) {
-		sprintf(filename, "Mapper_%d.txt",i+1);
+		sprintf(filename, "Mapper%d.txt",i+1);
 		filepath = constructPath("MapperInput",filename);
 		mapperIDtxtfiles[i] = fopen(filepath,"w");
 		free(filepath);
