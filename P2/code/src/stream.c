@@ -8,6 +8,7 @@ void emit(char * inputFileName) {
     FILE* inputFile = getFilePointer(inputFileName);
     if(inputFile == NULL) {
         printf("Failed to open file\n");
+        exit(0);
     }
     char line[maxFileNameLength];
     while( getLineFromFile(inputFile, line, maxFileNameLength) != -1 ) {
@@ -31,6 +32,10 @@ int main(int argc, char *argv[]) {
     char filename[maxFileNameLength];
     sprintf(filename,"MapperInput/Mapper%d.txt", mapperID);
     FILE *mapperFile = getFilePointer(filename);
+    if(mapperFile == NULL) {
+        printf("Failed to open Mapperxx.txt file\n");
+        exit(0);
+    }
     printf("Reading from %s\n",filename);
 
     char line[maxFileNameLength];
