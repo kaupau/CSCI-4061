@@ -5,7 +5,23 @@
  * The file should be in a corresponding folder in output/FinalData/ 
  */
 void writeFinalDSToFiles(void) {
-    
+    // create file descriptor
+    char outputFileName[maxFileNameLength] = "";
+    FILE* outputFile;
+
+    // for every word length in our data structure, create a new file and put the word count on it
+    for(int wordLength = 0; wordLength <= MaxWordLength; wordLength++) {
+        if(finalDS[wordLength] > 0) {
+            // format the file path name
+            sprintf(outputFileName, "%s/%d.txt", finalDir, wordLength);
+            outputFile = fopen(outputFileName,"w");
+
+            // format the file path name
+            fprintf(outputFile, "%d %d", wordLength, finalDS[wordLength]);
+            printf("kau %d %d", wordLength, finalDS[wordLength]); // remove later
+            fclose(outputFile);
+        }
+    }
 }
 
 

@@ -29,7 +29,14 @@ ssize_t getLineFromFile(FILE *fp, char *line, size_t len) {
 // return: The number of intermediate files the reducer should process
 // The list of intermediate file names are stored in myTasks array
 int getReducerTasks(int nReducers, int reducerID, char *intermediateDir, char **myTasks) {
-
+    DIR *dir = opendir(intermediateDir);
+    struct dirent *de;
+    int i = 0;
+    while( (de = readdir(dir)) != NULL ) {
+        myTasks[i] = de->d_name;
+        i++;
+    } 
+    return i+1;
 }
 
 

@@ -20,6 +20,14 @@ stream: $(SRCDIR)/stream.c $(LIBDIR)/utils.o
 $(LIBDIR)/utils.o: $(LIBDIR)/utils.c
 	$(CC) $(CFLAGS) -I$(INCLDIR) -c $(LIBDIR)/utils.c -o $(LIBDIR)/utils.o
 
+t0: mapreduce
+	python3 test/test.py T0
+
+t1: mapreduce
+	python3 test/test.py T1
+
+test: mapreduce
+	python3 test/test.py T0 T1 
 
 .PHONY: clean
 

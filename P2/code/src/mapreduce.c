@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
 	char* filepath;
 	char filename[maxFileNameLength];
 	for(int i = 0; i < nMappers; i++) {
-		sprintf(filename, "Mapper_%d.txt",i+1);
+		sprintf(filename, "Mapper%d.txt",i+1);
 		filepath = constructPath("MapperInput",filename);
 		mapperIDtxtfiles[i] = fopen(filepath,"w");
 		free(filepath);
@@ -102,6 +102,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// TODO: spawn mappers
+	printf("Spawning %d mappers\n", nMappers);
 	for(int i = 0; i < nMappers; i++) {
 		pid_t pid = fork();
 		if(pid == 0) {
@@ -129,8 +130,17 @@ int main(int argc, char *argv[]) {
 	printf("\nDone\n\n");
 
 	// TODO: spawn reducers
+	printf("Spawning %d reducers\n", nReducers);
+	for(int i = 0; i < nReducers; i++) {
+		pid_t pid = fork();
+		if(pid == 0) {
+			execl("./reducer","./reducer",intToString(i+1),NULL);
+			printf("Exec mapper failed\n"); exit(0);
+		}
+	}
 
 	// TODO: wait for all children to complete execution
+	waitForAll(nReducers);
 
 	return EXIT_SUCCESS;
 }
