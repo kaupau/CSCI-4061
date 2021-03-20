@@ -61,7 +61,7 @@ int getReducerTasks(int nReducers, int reducerID, char *intermediateDir, char **
         }
     }
     
-    int nTasks = floor(nAllTasks / nReducers);
+    int nTasks = nAllTasks / nReducers;
     int j = 0;
     if(reducerID==nReducers) {
         for(int i = nTasks*(reducerID-1); i < nAllTasks; i++) {
