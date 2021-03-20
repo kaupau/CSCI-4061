@@ -6,7 +6,7 @@
 int reducerID;
 char *intermediateDir = "output/IntermediateData";
 char *finalDir = "output/FinalData";
-int finalDS[MaxWordLength];
+int finalDS[MaxWordLength+1];
 
 void reduce(char *key);
 

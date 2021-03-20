@@ -37,7 +37,7 @@ int getReducerTasks(int nReducers, int reducerID, char *intermediateDir, char **
     // nAllTasks / nReducers = tasks per each reducer
     int nAllTasks = 0;
     char *allTasks[20] = {NULL};
-    for(int i = 1; i <= 20; i++) {
+    for(int i = 1; i < MaxWordLength; i++) {
         char filename[maxFileNameLength];
         strcpy(filename, intermediateDir);
         strcat(filename, "/");
@@ -61,15 +61,23 @@ int getReducerTasks(int nReducers, int reducerID, char *intermediateDir, char **
         }
     }
     
-    int nTasks = (nAllTasks / nReducers);
+    int nTasks = floor(nAllTasks / nReducers);
     int j = 0;
-    for(int i = nTasks*(reducerID-1); i < nTasks*(reducerID-1)+nTasks; i++) {
-        // printf("Task: %d \t%s\n", i, allTasks[i]);
-        myTasks[j] = malloc(sizeof(char)*maxFileNameLength);
-        strcpy(myTasks[j], allTasks[i]);
-        j++;
+    if(reducerID==nReducers) {
+        for(int i = nTasks*(reducerID-1); i < nAllTasks; i++) {
+            // printf("Task: %d \t%s\n", i, allTasks[i]);
+            myTasks[j] = malloc(sizeof(char)*maxFileNameLength);
+            strcpy(myTasks[j], allTasks[i]);
+            j++;
+        }
+    } else {
+        for(int i = nTasks*(reducerID-1); i < nTasks*(reducerID-1)+nTasks; i++) {
+            // printf("Task: %d \t%s\n", i, allTasks[i]);
+            myTasks[j] = malloc(sizeof(char)*maxFileNameLength);
+            strcpy(myTasks[j], allTasks[i]);
+            j++;
+        }
     }
-    printf("nTasks: %d\n", nTasks);
 
     return nTasks;
 }
