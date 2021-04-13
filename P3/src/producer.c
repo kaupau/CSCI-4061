@@ -11,6 +11,7 @@ void *producer(void *arg){
     //Send data to the shared queue
     //When reaching the end of the file, send EOF message to the sha
     
+    
     // cleanup and exit
     return NULL; 
 }

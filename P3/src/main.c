@@ -1,6 +1,33 @@
 #include "header.h"
 #include "semaphore.h"
 
+struct node {
+    int val;
+    struct node next;
+};
+
+// below not necessary?
+struct list {
+    struct node head;
+    struct node tail;
+};
+
+void insert() {
+    struct node head;
+    struct node *current = &head;
+    while(current->next != NULL) {
+        current = current->next;
+    }
+    current->next = 1;
+}
+
+void delete() {
+    struct node head;
+    struct node *current = &head;
+    head = head.next;
+    free(current);
+}
+
 /**
  * Write final word count to a single file.
  * The path name should be output/result.txt
