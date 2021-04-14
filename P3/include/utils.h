@@ -47,6 +47,17 @@ void writeLineToFile(char *filepath, char *line);
 /* directory */
 void bookeepingCode();
 
+// shared linked list declaration
+struct node {
+    struct node* next;
+    char* line;
+};
+
+struct sharedBuffer {
+    struct node* head;
+    pthread_cond_t* EOFSignal;
+    pthread_mutex_t* mutex;
+};
 
 #endif
 

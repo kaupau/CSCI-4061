@@ -1,33 +1,6 @@
 #include "header.h"
 #include "semaphore.h"
 
-struct node {
-    int val;
-    struct node next;
-};
-
-// below not necessary?
-struct list {
-    struct node head;
-    struct node tail;
-};
-
-void insert() {
-    struct node head;
-    struct node *current = &head;
-    while(current->next != NULL) {
-        current = current->next;
-    }
-    current->next = 1;
-}
-
-void delete() {
-    struct node head;
-    struct node *current = &head;
-    head = head.next;
-    free(current);
-}
-
 /**
  * Write final word count to a single file.
  * The path name should be output/result.txt
@@ -37,22 +10,35 @@ void writeFinalDSToFiles(void) {
 
 int main(int argc, char *argv[]){
     
-    //TODO: Argument check
+    // Argument check
+    if(argc < 3) {
+		printf("Incorrect number of arguments\n");
+		exit(EXIT_FAILURE);
+	}
 
+    int nConsumers 	= strtol(argv[1], NULL, 10);
+    char *inputFile = argv[2];
+    // TODO: OPTIONS, is there any built in parser option for flags??
+    char *options   = argv[3];   
+    
     bookeepingCode();
     
     //TODO: Initialize global variables, like shared queue, histogram
-    
 
-    //TODO: create producer and consumer threads
+
+    // Create producer and consumer threads
     pthread_t producerThread;
     pthread_t consumerThread;
     pthread_create(&producerThread, NULL, producer, NULL);
-    pthread_create(&consumerThread, NULL, consumer, NULL);
+    for(int i = 0; i < nConsumers; i++) {
+        pthread_create(&consumerThread, NULL, consumer, NULL);
+    }
 
-    //TODO: wait for all threads to complete execution
+    // Wait for all threads to complete execution
     pthread_join(producer, NULL);
-    pthread_join(consumer, NULL);
+    for(int i = 0; i < nConsumers; i++) {
+        pthread_join(consumer, NULL);
+    }
     
     //Write the final output
     writeFinalDSToFiles();
