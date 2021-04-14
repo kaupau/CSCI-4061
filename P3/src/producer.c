@@ -5,7 +5,7 @@
  * Producer thread will read from the file and write data to 
  * the end of the shared queue
  */
-void *producer(char* filename, void *arg){
+void *producer(char* filename, void *arg) {
     printf("producer\n");
     //TODO: open the file and read its content line by line
     //Send data to the shared queue
@@ -26,7 +26,7 @@ void *producer(char* filename, void *arg){
             current = current->next;
         }
         current->next = malloc(sizeof(struct node));
-        *(current->next) = (struct node) {NULL, line};
+        *(current->next) = (struct node) {NULL, line, lineNumber};
         pthread_mutex_unlock(buffer->mutex);
     }
 

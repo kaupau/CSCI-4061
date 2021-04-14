@@ -51,6 +51,7 @@ void bookeepingCode();
 struct node {
     struct node* next;
     char* line;
+    int lineNumber;
 };
 
 struct sharedBuffer {

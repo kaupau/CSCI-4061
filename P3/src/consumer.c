@@ -21,9 +21,11 @@ void *consumer(int consumerID, void *arg){
         struct node *current = buffer->head;
         buffer->head = buffer->head->next;
         char *line = current->line;
+        int lineNumber = current->lineNumber;
         free(current);
         pthread_mutex_unlock(buffer->mutex);
 
+        printf("consumer %d\n", consumerID);
         parse();
     }
     

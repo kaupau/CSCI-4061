@@ -24,14 +24,27 @@ int main(int argc, char *argv[]){
     bookeepingCode();
     
     //TODO: Initialize global variables, like shared queue, histogram
-
+    struct sharedBuffer* buffer = {};
 
     // Create producer and consumer threads
+    struct producerArgs {
+        char* filename;
+        struct sharedBuffer* buffer;
+    };
+    struct producerArgs pArgs = {inputFile, buffer};
+
+    struct consumerArgs {
+        int consumerID;
+        struct sharedBuffer* buffer;
+    };
+    struct consumerArgs cArgs = {0, buffer};
+
     pthread_t producerThread;
     pthread_t consumerThread;
-    pthread_create(&producerThread, NULL, producer, NULL);
+    pthread_create(&producerThread, NULL, producer, pArgs);
     for(int i = 0; i < nConsumers; i++) {
-        pthread_create(&consumerThread, NULL, consumer, NULL);
+        cArgs.consumerID = i;
+        pthread_create(&consumerThread, NULL, consumer, cArgs);
     }
 
     // Wait for all threads to complete execution
