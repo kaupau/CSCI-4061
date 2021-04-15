@@ -3,7 +3,11 @@
 
 #include "utils.h"
 
-// void *producer(void *arg);
-void *producer(char* filename, void *arg);
+void *producer(void *arg);
+
+struct producerArgs {
+    char** filename;
+    struct sharedBuffer* buffer;
+};
 
 #endif

@@ -3,6 +3,11 @@
 
 #include "utils.h"
 
-void *consumer(int consumerID, void *arg);
+void *consumer(void *arg);
+
+struct consumerArgs {
+    int consumerID;
+    struct sharedBuffer* buffer;
+};
 
 #endif

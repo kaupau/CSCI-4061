@@ -6,6 +6,10 @@
  * The path name should be output/result.txt
  */
 void writeFinalDSToFiles(void) {
+    FILE* outputFile;
+    outputFile = fopen("output/result.txt","w");
+    fprintf(outputFile, "5 8");
+    fclose(outputFile);
 }
 
 int main(int argc, char *argv[]){
@@ -22,33 +26,35 @@ int main(int argc, char *argv[]){
     char *options   = argv[3];   
     
     bookeepingCode();
-    
+    writeFinalDSToFiles();
     //TODO: Initialize global variables, like shared queue, histogram
-    struct sharedBuffer* buffer = {};
+    struct sharedBuffer* buffer = (struct sharedBuffer*) malloc(sizeof(struct sharedBuffer));
+    buffer->mutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
+    buffer->EOFSignal = (pthread_cond_t*) malloc(sizeof(pthread_cond_t));
+    pthread_mutex_init(buffer->mutex, NULL);
+    pthread_cond_init(buffer->EOFSignal, NULL);
+    buffer->head = NULL;
+    buffer->bufferLen = 0;
 
     // Create producer and consumer threads
-    struct producerArgs {
-        char* filename;
-        struct sharedBuffer* buffer;
-    };
-    struct producerArgs pArgs = {inputFile, buffer};
-
-    struct consumerArgs {
-        int consumerID;
-        struct sharedBuffer* buffer;
-    };
-    struct consumerArgs cArgs = {0, buffer};
-
+    struct producerArgs* pArgs = malloc(sizeof(struct producerArgs));
+    *pArgs = (struct producerArgs) {inputFile, buffer};
+    
     pthread_t producerThread;
     pthread_t consumerThread;
-    pthread_create(&producerThread, NULL, producer, pArgs);
+    pthread_create(&producerThread, NULL, producer, (void *) pArgs);
+
+    struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
+    *cArgs = (struct consumerArgs) {0, buffer};
+    // pthread_create(&consumerThread, NULL, consumer, (void *) cArgs);
     for(int i = 0; i < nConsumers; i++) {
-        cArgs.consumerID = i;
-        pthread_create(&consumerThread, NULL, consumer, cArgs);
+        struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
+        *cArgs = (struct consumerArgs) {i, buffer};
+        pthread_create(&consumerThread, NULL, consumer, (void *) cArgs);
     }
 
     // Wait for all threads to complete execution
-    pthread_join(producer, NULL);
+    pthread_join(producerThread, NULL);
     for(int i = 0; i < nConsumers; i++) {
         pthread_join(consumer, NULL);
     }

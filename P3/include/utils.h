@@ -50,12 +50,13 @@ void bookeepingCode();
 // shared linked list declaration
 struct node {
     struct node* next;
-    char* line;
+    char** line;
     int lineNumber;
 };
 
 struct sharedBuffer {
     struct node* head;
+    int bufferLen;
     pthread_cond_t* EOFSignal;
     pthread_mutex_t* mutex;
 };
