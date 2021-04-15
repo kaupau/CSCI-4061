@@ -21,8 +21,9 @@ void *producer(void *arg) {
     while( fileStatus != -1 ) {
         char* line = malloc(sizeof(char) * maxFileNameLength);
         fileStatus = getLineFromFile(inputFile, line, maxFileNameLength);
+        lineNumber++;
 
-        // printf("producer: %d\n", lineNumber++);
+        printf("producer: %d\n", lineNumber);
         buffer->bufferLen++;
         
         line[strlen(line)-1] = '\0';

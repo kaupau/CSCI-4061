@@ -20,9 +20,7 @@ void parse(char* line, int* localHist){
 
 // consumer function
 void *consumer(void *arg){
-    //TODO: keep reading from queue and process the data
-    // feel free to change
-
+    // keep reading from queue and process the data
     struct consumerArgs* args = (struct consumerArgs*) arg;
     struct sharedBuffer* buffer = (struct sharedBuffer*) args->buffer;
     printf("consumer %d\n", args->consumerID);
@@ -31,11 +29,10 @@ void *consumer(void *arg){
     
     while(1){
         if(buffer->bufferLen > 1) {
-            // printf("asdf");
             pthread_mutex_lock(buffer->mutex);
             pthread_cond_wait(buffer->cond, buffer->mutex);
             struct node *current = buffer->head;
-            // printf("%s\n", current->line);
+            
             if(buffer->head->next == NULL) {
                 buffer->head = NULL;
             } else {

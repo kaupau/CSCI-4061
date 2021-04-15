@@ -31,9 +31,9 @@ int main(int argc, char *argv[]){
     // Shared Queue
     struct sharedBuffer* buffer = (struct sharedBuffer*) malloc(sizeof(struct sharedBuffer));
     buffer->mutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
-    buffer->EOFSignal = (pthread_cond_t*) malloc(sizeof(pthread_cond_t));
+    buffer->cond = (pthread_cond_t*) malloc(sizeof(pthread_cond_t));
     pthread_mutex_init(buffer->mutex, NULL);
-    pthread_cond_init(buffer->EOFSignal, NULL);
+    pthread_cond_init(buffer->cond, NULL);
     buffer->head = NULL;
     buffer->bufferLen = 0;
     // Global Histogram
@@ -51,12 +51,12 @@ int main(int argc, char *argv[]){
 
     struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
     *cArgs = (struct consumerArgs) {0, buffer};
-    // pthread_create(&consumerThread, NULL, consumer, (void *) cArgs);
-    for(int i = 0; i < nConsumers; i++) {
-        struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
-        *cArgs = (struct consumerArgs) {i, buffer};
-        pthread_create(&(consumerThreads[i]), NULL, consumer, (void *) cArgs);
-    }
+    pthread_create(&consumerThreads[0], NULL, consumer, (void *) cArgs);
+    // for(int i = 0; i < nConsumers; i++) {
+    //     struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
+    //     *cArgs = (struct consumerArgs) {i, buffer};
+    //     pthread_create(&(consumerThreads[i]), NULL, consumer, (void *) cArgs);
+    // }
 
     // Wait for all threads to complete execution
     pthread_join(producerThread, NULL);
