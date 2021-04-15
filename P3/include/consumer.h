@@ -8,6 +8,8 @@ void *consumer(void *arg);
 struct consumerArgs {
     int consumerID;
     struct sharedBuffer* buffer;
+    int* globalHist;
+    pthread_mutex_t* globalHistMutex;
 };
 
 #endif

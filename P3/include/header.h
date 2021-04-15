@@ -8,4 +8,7 @@
 char *finalDir = "output/result.txt";
 char *logDir = "output/log.txt";
 
+pthread_mutex_t globalHistMutex;
+int globalHist[MaxWordLength] = {0};
+
 #endif

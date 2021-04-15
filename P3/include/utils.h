@@ -17,7 +17,7 @@
 #define chunkSize 1024
 #define MaxWordLength 20
 #define maxFileNameLength 200
-
+#define LineLength 512
 
 /* file I/O */
 /**
@@ -50,7 +50,7 @@ void bookeepingCode();
 // shared linked list declaration
 struct node {
     struct node* next;
-    char line[maxFileNameLength];
+    char line[LineLength + 1];
     int lineNumber;
 };
 

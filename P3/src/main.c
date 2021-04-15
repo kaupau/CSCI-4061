@@ -8,7 +8,10 @@
 void writeFinalDSToFiles(void) {
     FILE* outputFile;
     outputFile = fopen("output/result.txt","w");
-    fprintf(outputFile, "5 8");
+    for(int i = 0; i < MaxWordLength; i++) {
+      printf("Writing output: %d %d\n", i+1,globalHist[i]);
+      fprintf(outputFile, "%d %d\n", i+1,globalHist[i]);
+    }
     fclose(outputFile);
 }
 
@@ -35,6 +38,8 @@ int main(int argc, char *argv[]){
     buffer->head = NULL;
     buffer->bufferLen = 0;
 
+    pthread_mutex_init(&globalHistMutex,NULL);
+
     // Create producer and consumer threads
     struct producerArgs* pArgs = malloc(sizeof(struct producerArgs));
     *pArgs = (struct producerArgs) {inputFile, buffer};
@@ -43,12 +48,12 @@ int main(int argc, char *argv[]){
     pthread_t consumerThread[nConsumers];
     pthread_create(&producerThread, NULL, producer, (void *) pArgs);
 
-    struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
-    *cArgs = (struct consumerArgs) {0, buffer};
+    //struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
+    //*cArgs = (struct consumerArgs) {0, buffer};
     // pthread_create(&consumerThread, NULL, consumer, (void *) cArgs);
     for(int i = 0; i < nConsumers; i++) {
         struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
-        *cArgs = (struct consumerArgs) {i, buffer};
+        *cArgs = (struct consumerArgs) {i, buffer,globalHist,&globalHistMutex};
         pthread_create(&(consumerThread[i]), NULL, consumer, (void *) cArgs);
     }
 printf("Here before waiting\n");

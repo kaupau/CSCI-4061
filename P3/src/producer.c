@@ -17,13 +17,15 @@ void *producer(void *arg) {
     struct sharedBuffer* buffer = (struct sharedBuffer*) args->buffer;
     int lineNumber = 0;
 
-    char line[maxFileNameLength];
+    char line[LineLength + 1];
+    line[0] = '\0';
     
-    while( getLineFromFile(inputFile, line, maxFileNameLength) != -1 ) {
+    //while( getLineFromFile(inputFile, line, LineLength - strlen(line)) != -1 ) {
+    while(fgets(line,LineLength,inputFile)) {
         printf("producer: %d\n", lineNumber++);
 
-        line[strlen(line)-1] = '\0';
-        printf("Producer got line: %s\n",line);
+        line[strlen(line)] = '\0';
+        printf("Producer got line: >%s<\n",line);
 
         pthread_mutex_lock(buffer->mutex);
         buffer->bufferLen++;
@@ -32,7 +34,9 @@ void *producer(void *arg) {
             buffer->head = malloc(sizeof(struct node));
             buffer->head->next = current;
             buffer->head->lineNumber = lineNumber;
-            strcpy(buffer->head->line,line);
+
+              strcpy(buffer->head->line,line);
+              line[0] = '\0';
 
         pthread_mutex_unlock(buffer->mutex);
     }
