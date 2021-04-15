@@ -46,12 +46,12 @@ int main(int argc, char *argv[]){
 
     struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
     *cArgs = (struct consumerArgs) {0, buffer};
-    // pthread_create(&consumerThread, NULL, consumer, (void *) cArgs);
-    for(int i = 0; i < nConsumers; i++) {
-        struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
-        *cArgs = (struct consumerArgs) {i, buffer};
-        pthread_create(&consumerThread, NULL, consumer, (void *) cArgs);
-    }
+    pthread_create(&consumerThread, NULL, consumer, (void *) cArgs);
+    // for(int i = 0; i < nConsumers; i++) {
+    //     struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
+    //     *cArgs = (struct consumerArgs) {i, buffer};
+    //     pthread_create(&consumerThread, NULL, consumer, (void *) cArgs);
+    // }
 
     // Wait for all threads to complete execution
     pthread_join(producerThread, NULL);

@@ -16,13 +16,15 @@ void *producer(void *arg) {
     FILE *inputFile = getFilePointer(args->filename);
     struct sharedBuffer* buffer = (struct sharedBuffer*) args->buffer;
     int lineNumber = 0;
-
-    char line[maxFileNameLength];
+    int fileStatus = 0;
     
-    while( getLineFromFile(inputFile, line, maxFileNameLength) != -1 ) {
+    while( fileStatus != -1 ) {
+        char* line = malloc(sizeof(char) * maxFileNameLength);
+        fileStatus = getLineFromFile(inputFile, line, maxFileNameLength);
+
         printf("producer: %d\n", lineNumber++);
         buffer->bufferLen++;
-
+        
         line[strlen(line)-1] = '\0';
         
         pthread_mutex_lock(buffer->mutex);

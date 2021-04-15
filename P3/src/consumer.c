@@ -42,13 +42,12 @@ void *consumer(void *arg){
             char *line = current->line;
             int lineNumber = current->lineNumber;
             free(current);
-
+            buffer->bufferLen--;
             pthread_mutex_unlock(buffer->mutex);
 
             printf("consumer %d: %d\n", args->consumerID, lineNumber);
             
             parse(line,localHist);
-            buffer->bufferLen--;
         }        
     }
     
