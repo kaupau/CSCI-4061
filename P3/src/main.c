@@ -44,19 +44,15 @@ int main(int argc, char *argv[]){
     struct producerArgs* pArgs = malloc(sizeof(struct producerArgs));
     *pArgs = (struct producerArgs) {inputFile, buffer};
     
-    nConsumers = 3;
     pthread_t producerThread;
     pthread_t consumerThreads[nConsumers];
     pthread_create(&producerThread, NULL, producer, (void *) pArgs);
 
-    struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
-    *cArgs = (struct consumerArgs) {0, buffer};
-    pthread_create(&consumerThreads[0], NULL, consumer, (void *) cArgs);
-    // for(int i = 0; i < nConsumers; i++) {
-    //     struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
-    //     *cArgs = (struct consumerArgs) {i, buffer};
-    //     pthread_create(&(consumerThreads[i]), NULL, consumer, (void *) cArgs);
-    // }
+    for(int i = 0; i < nConsumers; i++) {
+        struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
+        *cArgs = (struct consumerArgs) {i, buffer};
+        pthread_create(&(consumerThreads[i]), NULL, consumer, (void *) cArgs);
+    }
 
     // Wait for all threads to complete execution
     pthread_join(producerThread, NULL);
