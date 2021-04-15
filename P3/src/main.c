@@ -30,9 +30,8 @@ int main(int argc, char *argv[]){
     //TODO: Initialize global variables, like shared queue, histogram
     struct sharedBuffer* buffer = (struct sharedBuffer*) malloc(sizeof(struct sharedBuffer));
     buffer->mutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
-    buffer->EOFSignal = (pthread_cond_t*) malloc(sizeof(pthread_cond_t));
+    buffer->EOFSignal = 0;
     pthread_mutex_init(buffer->mutex, NULL);
-    pthread_cond_init(buffer->EOFSignal, NULL);
     buffer->head = NULL;
     buffer->bufferLen = 0;
 
@@ -41,7 +40,7 @@ int main(int argc, char *argv[]){
     *pArgs = (struct producerArgs) {inputFile, buffer};
     
     pthread_t producerThread;
-    pthread_t consumerThread;
+    pthread_t consumerThread[nConsumers];
     pthread_create(&producerThread, NULL, producer, (void *) pArgs);
 
     struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
@@ -50,15 +49,17 @@ int main(int argc, char *argv[]){
     for(int i = 0; i < nConsumers; i++) {
         struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
         *cArgs = (struct consumerArgs) {i, buffer};
-        pthread_create(&consumerThread, NULL, consumer, (void *) cArgs);
+        pthread_create(&(consumerThread[i]), NULL, consumer, (void *) cArgs);
     }
-
+printf("Here before waiting\n");
     // Wait for all threads to complete execution
     pthread_join(producerThread, NULL);
     for(int i = 0; i < nConsumers; i++) {
-        pthread_join(consumer, NULL);
+      printf("waiting for %ld\n",consumerThread[i]);
+        pthread_join(consumerThread[i], NULL);
+        printf("waited for %ld\n",consumerThread[i]);
     }
-    
+printf("Here last\n");    
     //Write the final output
     writeFinalDSToFiles();
     

@@ -21,26 +21,23 @@ void *producer(void *arg) {
     
     while( getLineFromFile(inputFile, line, maxFileNameLength) != -1 ) {
         printf("producer: %d\n", lineNumber++);
-        buffer->bufferLen++;
 
         line[strlen(line)-1] = '\0';
-        
+        printf("Producer got line: %s\n",line);
+
         pthread_mutex_lock(buffer->mutex);
-        if(buffer->head == NULL) {
-            buffer->head = malloc(sizeof(struct node));
-            *(buffer->head) = (struct node) {NULL, line, lineNumber};
-        } else {
+        buffer->bufferLen++;
+
             struct node *current = buffer->head;
-            while(current->next != NULL) {
-                current = current->next;
-            }
-            current->next = malloc(sizeof(struct node));
-            *(current->next) = (struct node) {NULL, line, lineNumber};
-        }
+            buffer->head = malloc(sizeof(struct node));
+            buffer->head->next = current;
+            buffer->head->lineNumber = lineNumber;
+            strcpy(buffer->head->line,line);
+
         pthread_mutex_unlock(buffer->mutex);
     }
 
-    pthread_cond_broadcast(buffer->EOFSignal);
+    buffer->EOFSignal = 1;
 
     // cleanup and exit
     return NULL; 
