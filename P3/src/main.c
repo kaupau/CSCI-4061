@@ -28,6 +28,7 @@ int main(int argc, char *argv[]){
     bookeepingCode();
     writeFinalDSToFiles();
     //TODO: Initialize global variables, like shared queue, histogram
+    // Shared Queue
     struct sharedBuffer* buffer = (struct sharedBuffer*) malloc(sizeof(struct sharedBuffer));
     buffer->mutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
     buffer->EOFSignal = (pthread_cond_t*) malloc(sizeof(pthread_cond_t));
@@ -35,28 +36,32 @@ int main(int argc, char *argv[]){
     pthread_cond_init(buffer->EOFSignal, NULL);
     buffer->head = NULL;
     buffer->bufferLen = 0;
+    // Global Histogram
+    // globHist = (struct globalHist*) malloc(sizeof(struct globalHistogram));
+    // globHist->histogram = {0};
 
     // Create producer and consumer threads
     struct producerArgs* pArgs = malloc(sizeof(struct producerArgs));
     *pArgs = (struct producerArgs) {inputFile, buffer};
     
+    nConsumers = 3;
     pthread_t producerThread;
-    pthread_t consumerThread;
+    pthread_t consumerThreads[nConsumers];
     pthread_create(&producerThread, NULL, producer, (void *) pArgs);
 
     struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
     *cArgs = (struct consumerArgs) {0, buffer};
-    pthread_create(&consumerThread, NULL, consumer, (void *) cArgs);
-    // for(int i = 0; i < nConsumers; i++) {
-    //     struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
-    //     *cArgs = (struct consumerArgs) {i, buffer};
-    //     pthread_create(&consumerThread, NULL, consumer, (void *) cArgs);
-    // }
+    // pthread_create(&consumerThread, NULL, consumer, (void *) cArgs);
+    for(int i = 0; i < nConsumers; i++) {
+        struct consumerArgs* cArgs = malloc(sizeof(struct consumerArgs));
+        *cArgs = (struct consumerArgs) {i, buffer};
+        pthread_create(&(consumerThreads[i]), NULL, consumer, (void *) cArgs);
+    }
 
     // Wait for all threads to complete execution
     pthread_join(producerThread, NULL);
     for(int i = 0; i < nConsumers; i++) {
-        pthread_join(consumer, NULL);
+        pthread_join(consumerThreads[i], NULL);
     }
     
     //Write the final output

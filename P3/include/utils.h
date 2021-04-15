@@ -57,9 +57,11 @@ struct node {
 struct sharedBuffer {
     struct node* head;
     int bufferLen;
-    pthread_cond_t* EOFSignal;
+    pthread_cond_t* cond;
     pthread_mutex_t* mutex;
 };
+
+int EOFStatus;
 
 #endif
 

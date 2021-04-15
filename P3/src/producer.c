@@ -22,7 +22,7 @@ void *producer(void *arg) {
         char* line = malloc(sizeof(char) * maxFileNameLength);
         fileStatus = getLineFromFile(inputFile, line, maxFileNameLength);
 
-        printf("producer: %d\n", lineNumber++);
+        // printf("producer: %d\n", lineNumber++);
         buffer->bufferLen++;
         
         line[strlen(line)-1] = '\0';
@@ -39,10 +39,10 @@ void *producer(void *arg) {
             current->next = malloc(sizeof(struct node));
             *(current->next) = (struct node) {NULL, line, lineNumber};
         }
+        pthread_cond_signal(buffer->cond);
         pthread_mutex_unlock(buffer->mutex);
     }
 
-    pthread_cond_broadcast(buffer->EOFSignal);
 
     // cleanup and exit
     return NULL; 
