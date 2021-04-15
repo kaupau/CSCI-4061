@@ -44,7 +44,9 @@ void *producer(void *arg) {
         pthread_mutex_unlock(buffer->mutex);
     }
 
-
     // cleanup and exit
+    pthread_cond_broadcast(buffer->cond);
+    printf("producer over\n");
+    EOFStatus = -1;
     return NULL; 
 }

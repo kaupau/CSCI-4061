@@ -10,11 +10,4 @@ struct producerArgs {
     struct sharedBuffer* buffer;
 };
 
-struct globalHistogram {
-    int histogram[MaxWordLength];
-    pthread_mutex_t* mutex;
-};
-
-struct globalHistogram* globHist;
-
 #endif

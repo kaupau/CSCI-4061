@@ -59,6 +59,8 @@ struct sharedBuffer {
     int bufferLen;
     pthread_cond_t* cond;
     pthread_mutex_t* mutex;
+
+    int histogram[MaxWordLength+1];
 };
 
 int EOFStatus;

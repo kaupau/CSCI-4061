@@ -8,7 +8,7 @@
 void writeFinalDSToFiles(void) {
     FILE* outputFile;
     outputFile = fopen("output/result.txt","w");
-    fprintf(outputFile, "5 8");
+    fprintf(outputFile, "a a");
     fclose(outputFile);
 }
 
@@ -37,8 +37,10 @@ int main(int argc, char *argv[]){
     buffer->head = NULL;
     buffer->bufferLen = 0;
     // Global Histogram
-    // globHist = (struct globalHist*) malloc(sizeof(struct globalHistogram));
-    // globHist->histogram = {0};
+    for(int i = 0; i < MaxWordLength+1; i++) {
+        buffer->histogram[i] = 0;
+    }
+    EOFStatus = 1;
 
     // Create producer and consumer threads
     struct producerArgs* pArgs = malloc(sizeof(struct producerArgs));
@@ -61,7 +63,13 @@ int main(int argc, char *argv[]){
     }
     
     //Write the final output
-    writeFinalDSToFiles();
+    // writeFinalDSToFiles();
+    FILE* outputFile;
+    outputFile = fopen("output/result.txt","w");
+    for(int i = 1; i < MaxWordLength+1; i++)  {
+        fprintf(outputFile, "%d %d\n", i, buffer->histogram[i]);
+    }
+    fclose(outputFile);
     
     return 0; 
 }

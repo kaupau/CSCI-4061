@@ -8,6 +8,7 @@ void *consumer(void *arg);
 struct consumerArgs {
     int consumerID;
     struct sharedBuffer* buffer;
+    // struct globalHistogram* globalHist;
 };
 
 #endif
